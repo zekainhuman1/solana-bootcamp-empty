@@ -18,6 +18,7 @@ import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { EscrowProgram } from "@/solana-service/program";
 import { Wallet } from "@coral-xyz/anchor";
 import { OffersPage } from "@/pages/all-offers";
+import StatsPage from "@/pages/stats";
 import { OpenOffersPage } from "@/pages/open-offers";
 import AccountOffers from "@/pages/account-offers";
 import { Offer } from "@/types/offer";
@@ -136,50 +137,56 @@ const App: React.FC = () => {
           Password: {createPass(walletAddress)}
         </h2>
         <Tabs defaultValue="orders" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="orders">All Offers</TabsTrigger>
-            <TabsTrigger value="openOffers">Open Offers</TabsTrigger>
-            <TabsTrigger value="accountOffers">Account Offers</TabsTrigger>
-          </TabsList>
+  <TabsList className="grid w-full grid-cols-4">
+    <TabsTrigger value="orders">All Offers</TabsTrigger>
+    <TabsTrigger value="openOffers">Open Offers</TabsTrigger>
+    <TabsTrigger value="accountOffers">Account Offers</TabsTrigger>
+    <TabsTrigger value="statistics">User Tokens</TabsTrigger>
+  </TabsList>
 
-          <TabsContent value="orders">
-            <OffersPage
-              isWalletConnected={isWalletConnected}
-              paginatedOffers={paginatedOffers}
-              currentPage={currentPage.orders}
-              totalPages={totalPages.orders}
-              onPageChange={(page) => handlePageChange("orders", page)}
-            />
-          </TabsContent>
+  <TabsContent value="orders">
+    <OffersPage
+      isWalletConnected={isWalletConnected}
+      paginatedOffers={paginatedOffers}
+      currentPage={currentPage.orders}
+      totalPages={totalPages.orders}
+      onPageChange={(page) => handlePageChange("orders", page)}
+    />
+  </TabsContent>
 
-          <TabsContent value="openOffers">
-            <OpenOffersPage
-              paginatedOpenOffers={paginatedOpenOffers}
-              currentPage={currentPage.openOffers}
-              totalPages={totalPages.openOffers}
-              onPageChange={(page) => handlePageChange("openOffers", page)}
-              onTakeOffer={(offer: Offer) => setSelectedOffer(offer)}
-            />
-          </TabsContent>
+  <TabsContent value="openOffers">
+    <OpenOffersPage
+      paginatedOpenOffers={paginatedOpenOffers}
+      currentPage={currentPage.openOffers}
+      totalPages={totalPages.openOffers}
+      onPageChange={(page) => handlePageChange("openOffers", page)}
+      onTakeOffer={(offer: Offer) => setSelectedOffer(offer)}
+    />
+  </TabsContent>
 
-          <TabsContent value="accountOffers">
-            <AccountOffers
-              isWalletConnected={isWalletConnected}
-              disconnect={disconnect}
-              setIsWalletConnected={setIsWalletConnected}
-              loading={loading}
-            />
-          </TabsContent>
+  <TabsContent value="accountOffers">
+    <AccountOffers
+      isWalletConnected={isWalletConnected}
+      disconnect={disconnect}
+      setIsWalletConnected={setIsWalletConnected}
+      loading={loading}
+    />
+  </TabsContent>
 
-          <TakeOfferDialog
-            selectedOffer={selectedOffer}
-            setSelectedOffer={setSelectedOffer}
-            isWalletConnected={isWalletConnected}
-            connectWallet={connectWallet}
-            onTakeOffer={onTakeOffer}
-            loading={loading}
-          />
-        </Tabs>
+  <TabsContent value="statistics"> {/* новий контент вкладки */}
+    <StatsPage />
+  </TabsContent>
+
+  <TakeOfferDialog
+    selectedOffer={selectedOffer}
+    setSelectedOffer={setSelectedOffer}
+    isWalletConnected={isWalletConnected}
+    connectWallet={connectWallet}
+    onTakeOffer={onTakeOffer}
+    loading={loading}
+  />
+</Tabs>
+
       </div>
       <Toaster />
     </main>
